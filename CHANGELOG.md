@@ -1,14 +1,5 @@
 # Changelog
 
-## Beta 7
-
-#### Breaking Changes
-
-* Task methods that accecpt callbacks (like `run` or `bounds`) now return and instance of `XMLHttpRequest` as opposed to the task or service.
-* 
-
-#### Changes
-
 ## Beta 6
 
 #### Breaking Changes

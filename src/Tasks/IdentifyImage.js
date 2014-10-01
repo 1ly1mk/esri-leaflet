@@ -1,9 +1,4 @@
 L.esri.Tasks.IdentifyImage = L.esri.Tasks.Identify.extend({
-  setters: {
-    'setMosaicRule': 'mosaicRule',
-    'setRenderingRule': 'renderingRule',
-    'returnCatalogItems': 'returnCatalogItems'
-  },
   params: {
     returnGeometry: false
   },
@@ -20,8 +15,18 @@ L.esri.Tasks.IdentifyImage = L.esri.Tasks.Identify.extend({
     return this;
   },
 
+  setMosaicRule: function(mosaicRule) {
+    this.params.mosaicRule = mosaicRule;
+    return this;
+  },
+
   getMosaicRule: function() {
     return this.params.mosaicRule;
+  },
+
+  setRenderingRule: function(renderingRule) {
+    this.params.renderingRule = renderingRule;
+    return this;
   },
 
   getRenderingRule: function() {
@@ -37,10 +42,16 @@ L.esri.Tasks.IdentifyImage = L.esri.Tasks.Identify.extend({
     return this.params.pixelSize;
   },
 
+  returnCatalogItems: function (returnCatalogItems) {
+    this.params.returnCatalogItems = returnCatalogItems;
+    return this;
+  },
+
   run: function (callback, context){
-    return this.request(function(error, response){
-      callback.call(context, error, (response && this._responseToGeoJSON(response)), response);
-    }, this);
+    var _this = this;
+    this.request(function(error, response){
+      callback.call(context, error, (response && _this._responseToGeoJSON(response)), response);
+    }, context);
   },
 
   // get pixel data and return as geoJSON point

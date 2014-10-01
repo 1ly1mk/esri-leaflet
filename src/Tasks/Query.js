@@ -1,13 +1,4 @@
 L.esri.Tasks.Query = L.esri.Tasks.Task.extend({
-  setters: {
-    'offset': 'offset',
-    'limit': 'limit',
-    'outFields': 'fields[]',
-    'precision': 'geometryPrecision',
-    'featureIds': 'objectIds[]',
-    'returnGeometry': 'returnGeometry',
-    'token': 'token'
-  },
 
   path: 'query',
 
@@ -42,6 +33,16 @@ L.esri.Tasks.Query = L.esri.Tasks.Task.extend({
     return this;
   },
 
+  offset: function(offset){
+    this.params.offset = offset;
+    return this;
+  },
+
+  limit: function(limit){
+    this.params.limit = limit;
+    return this;
+  },
+
   between: function(start, end){
     this.params.time = ([start.valueOf(), end.valueOf()]).join();
     return this;
@@ -53,6 +54,16 @@ L.esri.Tasks.Query = L.esri.Tasks.Task.extend({
     } else {
       this.params.outFields = fields;
     }
+    return this;
+  },
+
+  precision: function(num){
+    this.params.geometryPrecision = num;
+    return this;
+  },
+
+  returnGeometry: function (returnGeometry) {
+    this.params.returnGeometry = returnGeometry;
     return this;
   },
 
@@ -69,36 +80,50 @@ L.esri.Tasks.Query = L.esri.Tasks.Task.extend({
     return this;
   },
 
+  featureIds: function(ids){
+    this.params.objectIds = ids.join(',');
+    return this;
+  },
+
+  token: function(token){
+    this.params.token = token;
+    return this;
+  },
+
   run: function(callback, context){
     this._cleanParams();
-    return this.request(function(error, response){
+    this.request(function(error, response){
       callback.call(context, error, (response && L.esri.Util.responseToFeatureCollection(response)), response);
     }, context);
+    return this;
   },
 
   count: function(callback, context){
     this._cleanParams();
     this.params.returnCountOnly = true;
-    return this.request(function(error, response){
+    this.request(function(error, response){
       callback.call(this, error, (response && response.count), response);
     }, context);
+    return this;
   },
 
   ids: function(callback, context){
     this._cleanParams();
     this.params.returnIdsOnly = true;
-    return this.request(function(error, response){
+    this.request(function(error, response){
       callback.call(this, error, (response && response.objectIds), response);
     }, context);
+    return this;
   },
 
   // only valid for Feature Services running on ArcGIS Server 10.3 or ArcGIS Online
   bounds: function(callback, context){
     this._cleanParams();
     this.params.returnExtentOnly = true;
-    return this.request(function(error, response){
+    this.request(function(error, response){
       callback.call(context, error, (response && response.extent && L.esri.Util.extentToBounds(response.extent)), response);
     }, context);
+    return this;
   },
 
   // only valid for image services
